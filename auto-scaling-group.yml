@@ -6,6 +6,7 @@ Resources:
       LaunchTemplateData:
         ImageId: "${image_id}"
         InstanceType: "${instance_type}"
+        SecurityGroupIds: [${instance_security_groups}]
         KeyName: "${key_name}"
         UserData:
           Fn::Base64: !Sub |

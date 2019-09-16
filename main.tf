@@ -49,6 +49,7 @@ resource "aws_lb" "this" {
   name               = "${var.name}-alb"
   internal           = var.aws_lb_internal
   load_balancer_type = "application"
+  security_groups    = var.lb_security_groups
   subnets            = var.subnet_ids
 
   tags = var.tags
@@ -92,11 +93,12 @@ data "template_file" "this" {
   template = file("${path.module}/auto-scaling-group.yml")
 
   vars = {
-    launch_template_name = var.name
-    image_id             = var.image_id
-    instance_type        = var.instance_type
-    key_name             = aws_key_pair.this.key_name
-    tags                 = local.tags_lt_format
+    launch_template_name     = var.name
+    image_id                 = var.image_id
+    instance_type            = var.instance_type
+    instance_security_groups = join("\", \"", var.instance_security_groups)
+    key_name                 = aws_key_pair.this.key_name
+    tags                     = local.tags_lt_format
 
     description  = "Autoscaling group for EC2 cluster"
     subnets      = join("\",\"", var.subnet_ids)

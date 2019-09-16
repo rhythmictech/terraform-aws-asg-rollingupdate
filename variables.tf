@@ -76,4 +76,14 @@ variable "aws_lb_internal" {
   default     = true
 }
 
+variable "instance_security_groups" {
+  description = "Security groups to apply to instances in ASG"
+  type        = list(string)
+}
+
+variable "lb_security_groups" {
+  description = "Security groups to apply to Load Balancer"
+  type        = list(string)
+}
+
 variable "tags" {}

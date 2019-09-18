@@ -7,7 +7,6 @@ Resources:
         ImageId: "${image_id}"
         InstanceType: "${instance_type}"
         SecurityGroupIds: ["${instance_security_groups}"]
-        HealthCheckGracePeriod: 60
         KeyName: "${key_name}"
         UserData:
           Fn::Base64: !Sub |
@@ -29,6 +28,7 @@ Resources:
     Properties:
       AutoScalingGroupName: "${name}"
       HealthCheckType: "${healthCheck}"
+      HealthCheckGracePeriod: 60
       MaxSize: "${maxSize}"
       MetricsCollection:
         - Granularity: '1Minute'

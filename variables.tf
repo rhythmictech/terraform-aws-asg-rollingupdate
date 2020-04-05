@@ -86,4 +86,7 @@ variable "lb_security_groups" {
   type        = list(string)
 }
 
-variable "tags" {}
+variable "tags" {
+  description = "Tags definition to apply to resources"
+  type        = map(string)
+}

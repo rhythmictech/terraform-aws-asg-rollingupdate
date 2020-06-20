@@ -2,9 +2,9 @@
 # outputs
 ########################################
 
-output "aws_lb_target_group" {
-  description = "AWS LB Target Group resource"
-  value       = aws_lb_target_group.this
+output "aws_cloudformation_stack" {
+  description = "AWS ASG CFN Stack resource"
+  value       = aws_cloudformation_stack.this
 }
 
 output "aws_lb" {
@@ -17,7 +17,7 @@ output "aws_lb_listener" {
   value       = aws_lb_listener.this
 }
 
-output "aws_cloudformation_stack" {
-  description = "AWS ASG CFN Stack resource"
-  value       = aws_cloudformation_stack.this
+output "aws_lb_target_group" {
+  description = "AWS LB Target Group resource"
+  value       = aws_lb_target_group.this
 }

@@ -24,9 +24,9 @@ locals {
   tags_lt_format  = jsonencode(null_resource.tags_for_lt.*.triggers)
 }
 
-# =============================================
+########################################
 # Main
-# =============================================
+########################################
 
 resource "aws_lb_target_group" "this" {
   name_prefix = substr("${var.name}-tg", 0, 6)
@@ -37,7 +37,7 @@ resource "aws_lb_target_group" "this" {
   slow_start  = 60
 
   health_check {
-    protocol          = "HTTP"
+    protocol          = "HTTP" #tfsec:ignore:AWS004, TODO: make var
     path              = var.health_check_path
     healthy_threshold = "2"
   }
@@ -58,7 +58,7 @@ resource "aws_lb" "this" {
 resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
   port              = var.lb_listener_port
-  protocol          = "HTTP"
+  protocol          = "HTTP" #tfsec:ignore:AWS004, TODO: make var
 
   default_action {
     type             = "forward"

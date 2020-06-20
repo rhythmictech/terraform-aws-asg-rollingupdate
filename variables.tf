@@ -1,6 +1,7 @@
-# =============================================
+########################################
 # Variables
-# =============================================
+########################################
+
 variable "batch_max_size" {
   description = "Maximum batch size for ASG rolling updates"
   type        = string

@@ -44,10 +44,10 @@ Terraform module to create Autoscaling Group in AWS with AutoScalingRollingUpdat
 
 | Name | Description |
 |------|-------------|
-| aws\_cloudformation\_stack | n/a |
-| aws\_lb | n/a |
-| aws\_lb\_listener | n/a |
-| aws\_lb\_target\_group | n/a |
+| aws\_cloudformation\_stack | AWS ASG CFN Stack resource |
+| aws\_lb | AWS LB resource |
+| aws\_lb\_listener | AWS LB listener resource |
+| aws\_lb\_target\_group | AWS LB Target Group resource |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

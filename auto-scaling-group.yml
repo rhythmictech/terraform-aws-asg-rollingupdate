@@ -20,7 +20,7 @@ Resources:
               --stack $${AWS::StackId} \
               --resource ${name}AutoscalingGroup \
               --region $${AWS::Region}
-        TagSpecifications: 
+        TagSpecifications:
           - ResourceType: instance
             Tags: ${tags}
   ${name}AutoscalingGroup:

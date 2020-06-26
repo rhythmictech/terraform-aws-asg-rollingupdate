@@ -9,7 +9,7 @@ variable "asg_health_check_path" {
 }
 
 variable "vpc_id" {
-  description = "ID of VPC in which to instanciate resources"
+  description = "ID of VPC in which to instantiate resources"
   type        = string
 }
 

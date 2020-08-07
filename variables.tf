@@ -33,19 +33,38 @@ variable "health_check_type" {
 }
 
 variable "image_id" {
+  default     = ""
   description = "AMI ID to use for this cluster"
   type        = string
 }
 
 variable "instance_type" {
-  default     = "t3.micro"
+  default     = ""
   description = "Instance type to use in ASG"
   type        = string
 }
 
 variable "instance_security_groups" {
+  default     = []
   description = "Security groups to apply to instances in ASG"
   type        = list(string)
+}
+
+variable "keypair_name" {
+  default     = ""
+  description = "Name of an externally created keypair to attach to the automatically created instances. This only applies if launch_template_name is defined AND scaling_object_type is set to 'launchtemplate'"
+  type        = string
+}
+
+variable "launch_template_name" {
+  default     = ""
+  description = "Name of externally created launch template to use with this module. If not defined and scaling_object_type is set to 'launchtemplate' (the default value), this will cause a launch template to be created in the cloudformation template"
+  type        = string
+}
+variable "launch_template_version" {
+  default     = ""
+  description = "Version of externally created launch template to use with this module. If launch_template_name is defined this MUST be defined."
+  type        = string
 }
 
 variable "lb_listener_port" {
@@ -71,6 +90,11 @@ variable "min_instances" {
   type        = string
 }
 
+variable "min_instances_in_service" {
+  description = "Minimum number of instances that must remain in service when autoscaling group is updated"
+  type        = string
+}
+
 variable "name" {
   default     = "ec2-spot-cluster"
   description = "common name for resources in this module"
@@ -80,6 +104,12 @@ variable "name" {
 variable "subnet_ids" {
   description = "Subnets ALB will listen on"
   type        = list(string)
+}
+
+variable "scaling_object_type" {
+  default     = "launchtemplate"
+  description = "The object type the autoscaling group should use as the basis for its instances. The default (and currently the only supported) value is 'LaunchTemplate'. Future values may include 'MixedInstancesPolicy', 'LaunchConfigurationName', and 'InstanceId'"
+  type        = string
 }
 
 variable "tags" {

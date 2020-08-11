@@ -49,6 +49,7 @@ data "template_file" "this" {
     launchTemplateName       = var.launch_template_name
     launchTemplateVersion    = var.launch_template_version
     maxBatch                 = var.batch_max_size
+    maxLifetime              = var.max_instance_lifetime
     maxSize                  = var.max_instances
     minInService             = var.min_instances_in_service
     minSize                  = var.min_instances

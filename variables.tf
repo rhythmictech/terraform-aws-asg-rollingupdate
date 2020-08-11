@@ -84,6 +84,12 @@ variable "max_instances" {
   type        = string
 }
 
+variable "max_instance_lifetime" {
+  default     = 0
+  description = "Maximum lifetime of instances in ASG in seconds (values must be either equal to 0 or between 604800 and 31536000 seconds.)"
+  type        = number
+}
+
 variable "min_instances" {
   default     = 2
   description = "Min instances in ASG"

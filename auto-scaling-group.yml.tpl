@@ -32,6 +32,7 @@ Resources:
       HealthCheckType: "${healthCheck}"
       HealthCheckGracePeriod: 60
       MaxSize: "${maxSize}"
+      MaxInstanceLifetime: ${maxLifetime}
       MetricsCollection:
         - Granularity: '1Minute'
       MinSize: "${minSize}"

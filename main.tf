@@ -7,6 +7,7 @@
 locals {
   tags_asg_format = jsonencode(null_resource.tags_for_asg.*.triggers)
   tags_lt_format  = jsonencode(null_resource.tags_for_lt.*.triggers)
+  create_lt       = var.launch_template_name != "" && lower(var.scaling_object_type) == "launchtemplate"
 }
 
 resource "null_resource" "tags_for_asg" {
@@ -29,50 +30,30 @@ resource "null_resource" "tags_for_lt" {
 }
 
 ########################################
-# keys
-########################################
-
-module "asg_instance_key" {
-  source  = "rhythmictech/secretsmanager-secret/aws"
-  version = "0.0.3"
-
-  name        = "${var.name}-key"
-  description = "Instance key for asg ${var.name}"
-  tags        = var.tags
-  value       = tls_private_key.this.private_key_pem
-}
-
-resource "aws_key_pair" "this" {
-  key_name_prefix = var.name
-  public_key      = tls_private_key.this.public_key_openssh
-}
-
-resource "tls_private_key" "this" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-########################################
 # LB
 ########################################
 
 data "template_file" "this" {
-  template = file("${path.module}/auto-scaling-group.yml")
+  template = file("${path.module}/auto-scaling-group.yml.tpl")
 
   vars = {
     name                     = var.name
-    launch_template_name     = var.name
     asg_tags                 = local.tags_asg_format
+    createLt                 = local.create_lt
     description              = "Autoscaling group for EC2 cluster"
     healthCheck              = var.health_check_type
     image_id                 = var.image_id
     instance_security_groups = join("\", \"", var.instance_security_groups)
     instance_type            = var.instance_type
-    key_name                 = aws_key_pair.this.key_name
+    key_name                 = var.keypair_name
+    launchTemplateName       = var.launch_template_name
+    launchTemplateVersion    = var.launch_template_version
     maxBatch                 = var.batch_max_size
+    maxLifetime              = var.max_instance_lifetime
     maxSize                  = var.max_instances
-    minInService             = var.max_instances / 2
+    minInService             = var.min_instances_in_service
     minSize                  = var.min_instances
+    scalingObject            = var.scaling_object_type
     tags                     = local.tags_lt_format
     targetGroups             = aws_lb_target_group.this.id
     subnets                  = join("\",\"", var.subnet_ids)

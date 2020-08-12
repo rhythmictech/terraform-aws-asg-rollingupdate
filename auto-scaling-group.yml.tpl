@@ -1,8 +1,9 @@
 Resources:
+  %{~ if createLt ~}
   ${name}LaunchTemplate:
     Type: AWS::EC2::LaunchTemplate
     Properties:
-      LaunchTemplateName: "${launch_template_name}"
+      LaunchTemplateName: "${name}"
       LaunchTemplateData:
         ImageId: "${image_id}"
         InstanceType: "${instance_type}"
@@ -23,6 +24,7 @@ Resources:
         TagSpecifications:
           - ResourceType: instance
             Tags: ${tags}
+  %{~ endif ~}%
   ${name}AutoscalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
@@ -30,12 +32,20 @@ Resources:
       HealthCheckType: "${healthCheck}"
       HealthCheckGracePeriod: 60
       MaxSize: "${maxSize}"
+      MaxInstanceLifetime: ${maxLifetime}
       MetricsCollection:
         - Granularity: '1Minute'
       MinSize: "${minSize}"
+      %{~ if lower(scalingObject) == "launchtemplate" ~}%
       LaunchTemplate:
-        LaunchTemplateId: !Ref '${name}LaunchTemplate'
+        %{~ if createLt ~}
+        LaunchTemplate: "!Ref '${name}LaunchTemplate'"
         Version: !GetAtt '${name}LaunchTemplate.LatestVersionNumber'
+        %{~ else ~}
+        LaunchTemplateName: "${launchTemplateName}"
+        Version: "${launchTemplateVersion}"
+        %{~ endif ~}
+      %{~ endif ~}%
       TargetGroupARNs: ["${targetGroups}"]
       VPCZoneIdentifier: ["${subnets}"]
       Tags: ${asg_tags}

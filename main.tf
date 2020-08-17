@@ -78,7 +78,7 @@ resource "aws_lb" "this" {
 resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
   port              = var.lb_listener_port
-  protocol          = "HTTP" #tfsec:ignore:AWS004, TODO: make var
+  protocol          = var.lb_listener_protocol
 
   default_action {
     type             = "forward"
@@ -88,6 +88,13 @@ resource "aws_lb_listener" "this" {
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_lb_listener_certificate" "this" {
+  count = (var.lb_listener_certificate_arn != "" && var.lb_listener_protocol == "HTTPS") ? 1 : 0
+
+  listener_arn    = aws_lb_listener.this.arn
+  certificate_arn = var.lb_listener_certificate_arn
 }
 
 resource "aws_lb_target_group" "this" {

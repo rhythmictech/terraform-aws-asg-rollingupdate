@@ -79,11 +79,11 @@ variable "lb_listener_port" {
   type        = number
 }
 
- variable "lb_listener_protocol" {
-   default    = "HTTP"
-   description = "Protcol on which LB will listen"
-   type        = string
-
+variable "lb_listener_protocol" {
+  default     = "HTTP"
+  description = "Protcol on which LB will listen"
+  type        = string
+}
 
 variable "lb_security_groups" {
   description = "Security groups to apply to Load Balancer"

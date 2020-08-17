@@ -78,7 +78,7 @@ resource "aws_lb" "this" {
 resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
   port              = var.lb_listener_port
-  protocol          = var.lb_listener_protocol
+  protocol          = var.lb_listener_protocol #tfsec:ignore:AWS004
 
   default_action {
     type             = "forward"

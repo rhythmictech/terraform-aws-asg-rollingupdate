@@ -67,7 +67,7 @@ variable "launch_template_version" {
   type        = string
 }
 
-variable "lb_listener_certificate_arn" {
+variable "lb_listener_certificate" {
   default     = ""
   description = "ARN of the certificate to attach to the LB. Only if lb_listener_protocol is HTTPS"
   type        = string

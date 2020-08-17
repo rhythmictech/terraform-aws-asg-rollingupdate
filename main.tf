@@ -91,10 +91,10 @@ resource "aws_lb_listener" "this" {
 }
 
 resource "aws_lb_listener_certificate" "this" {
-  count = (var.lb_listener_certificate_arn != "" && var.lb_listener_protocol == "HTTPS") ? 1 : 0
+  count = (var.lb_listener_certificate != "" && var.lb_listener_protocol == "HTTPS") ? 1 : 0
 
   listener_arn    = aws_lb_listener.this.arn
-  certificate_arn = var.lb_listener_certificate_arn
+  certificate_arn = var.lb_listener_certificate
 }
 
 resource "aws_lb_target_group" "this" {

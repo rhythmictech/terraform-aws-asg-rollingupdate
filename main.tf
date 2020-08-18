@@ -7,7 +7,7 @@
 locals {
   tags_asg_format = jsonencode(null_resource.tags_for_asg.*.triggers)
   tags_lt_format  = jsonencode(null_resource.tags_for_lt.*.triggers)
-  create_lt       = var.launch_template_name != "" && lower(var.scaling_object_type) == "launchtemplate"
+  create_lt       = var.launch_template_name == "" && lower(var.scaling_object_type) == "launchtemplate"
 }
 
 resource "null_resource" "tags_for_asg" {

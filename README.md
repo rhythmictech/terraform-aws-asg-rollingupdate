@@ -46,6 +46,7 @@ Terraform module to create Autoscaling Group in AWS with AutoScalingRollingUpdat
 | lb\_listener\_certificate | ARN of the certificate to attach to the LB. Only if lb\_listener\_protocol is HTTPS | `string` | `""` | no |
 | lb\_listener\_port | Port on which LB will listen | `number` | `80` | no |
 | lb\_listener\_protocol | Protcol on which LB will listen | `string` | `"HTTP"` | no |
+| lb\_listener\_ssl\_policy | AWS SSL Security Policy to use with an HTTPS listener on the Load Balancer | `string` | `"ELBSecurityPolicy-TLS-1-2-Ext-2018-06"` | no |
 | max\_instance\_lifetime | Maximum lifetime of instances in ASG in seconds (values must be either equal to 0 or between 604800 and 31536000 seconds.) | `number` | `0` | no |
 | max\_instances | Max instances in ASG | `string` | `4` | no |
 | min\_instances | Min instances in ASG | `string` | `2` | no |

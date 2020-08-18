@@ -85,6 +85,12 @@ variable "lb_listener_protocol" {
   type        = string
 }
 
+variable "lb_listener_ssl_policy" {
+  default     = "ELBSecurityPolicy-TLS-1-2-Ext-2018-06"
+  description = "AWS SSL Security Policy to use with an HTTPS listener on the Load Balancer"
+  type        = string
+}
+
 variable "lb_security_groups" {
   description = "Security groups to apply to Load Balancer"
   type        = list(string)

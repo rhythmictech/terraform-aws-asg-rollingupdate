@@ -24,7 +24,7 @@ Resources:
         TagSpecifications:
           - ResourceType: instance
             Tags: ${tags}
-  %{~ endif ~}%
+  %{~ endif ~}
   ${name}AutoscalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
@@ -36,7 +36,7 @@ Resources:
       MetricsCollection:
         - Granularity: '1Minute'
       MinSize: "${minSize}"
-      %{~ if lower(scalingObject) == "launchtemplate" ~}%
+      %{~ if lower(scalingObject) == "launchtemplate" ~}
       LaunchTemplate:
         %{~ if createLt ~}
         LaunchTemplate: "!Ref '${name}LaunchTemplate'"
@@ -45,7 +45,7 @@ Resources:
         LaunchTemplateName: "${launchTemplateName}"
         Version: "${launchTemplateVersion}"
         %{~ endif ~}
-      %{~ endif ~}%
+      %{~ endif ~}
       TargetGroupARNs: ["${targetGroups}"]
       VPCZoneIdentifier: ["${subnets}"]
       Tags: ${asg_tags}

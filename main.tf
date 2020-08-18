@@ -7,7 +7,7 @@
 locals {
   tags_asg_format = jsonencode(null_resource.tags_for_asg.*.triggers)
   tags_lt_format  = jsonencode(null_resource.tags_for_lt.*.triggers)
-  create_lt       = var.launch_template_name != "" && lower(var.scaling_object_type) == "launchtemplate"
+  create_lt       = var.launch_template_name == "" && lower(var.scaling_object_type) == "launchtemplate"
 }
 
 resource "null_resource" "tags_for_asg" {
@@ -78,7 +78,9 @@ resource "aws_lb" "this" {
 resource "aws_lb_listener" "this" {
   load_balancer_arn = aws_lb.this.arn
   port              = var.lb_listener_port
-  protocol          = "HTTP" #tfsec:ignore:AWS004, TODO: make var
+  protocol          = var.lb_listener_protocol #tfsec:ignore:AWS004
+  ssl_policy        = var.lb_listener_protocol == "HTTPS" ? var.lb_listener_ssl_policy : null
+  certificate_arn   = var.lb_listener_certificate != "" ? var.lb_listener_certificate : null
 
   default_action {
     type             = "forward"

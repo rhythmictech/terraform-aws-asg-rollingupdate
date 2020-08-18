@@ -67,10 +67,28 @@ variable "launch_template_version" {
   type        = string
 }
 
+variable "lb_listener_certificate" {
+  default     = ""
+  description = "ARN of the certificate to attach to the LB. Only if lb_listener_protocol is HTTPS"
+  type        = string
+}
+
 variable "lb_listener_port" {
   default     = 80
   description = "Port on which LB will listen"
   type        = number
+}
+
+variable "lb_listener_protocol" {
+  default     = "HTTP"
+  description = "Protcol on which LB will listen"
+  type        = string
+}
+
+variable "lb_listener_ssl_policy" {
+  default     = "ELBSecurityPolicy-TLS-1-2-Ext-2018-06"
+  description = "AWS SSL Security Policy to use with an HTTPS listener on the Load Balancer"
+  type        = string
 }
 
 variable "lb_security_groups" {

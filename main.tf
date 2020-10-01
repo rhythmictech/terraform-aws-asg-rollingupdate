@@ -53,6 +53,7 @@ data "template_file" "this" {
     maxSize                  = var.max_instances
     minInService             = var.min_instances_in_service
     minSize                  = var.min_instances
+    pauseTime                = var.pause_time
     scalingObject            = var.scaling_object_type
     tags                     = local.tags_lt_format
     targetGroups             = aws_lb_target_group.this.id

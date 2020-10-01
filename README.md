@@ -51,6 +51,7 @@ Terraform module to create Autoscaling Group in AWS with AutoScalingRollingUpdat
 | max\_instances | Max instances in ASG | `string` | `4` | no |
 | min\_instances | Min instances in ASG | `string` | `2` | no |
 | name | common name for resources in this module | `string` | `"ec2-spot-cluster"` | no |
+| pause\_time | Time to wait for a new instance to check-in before marking it as failed. Specify PauseTime in the ISO8601 duration format (in the format PT#H#M#S, where each # is the number of hours, minutes, and seconds, respectively). | `string` | `"PT5M"` | no |
 | scaling\_object\_type | The object type the autoscaling group should use as the basis for its instances. The default (and currently the only supported) value is 'LaunchTemplate'. Future values may include 'MixedInstancesPolicy', 'LaunchConfigurationName', and 'InstanceId' | `string` | `"launchtemplate"` | no |
 
 ## Outputs

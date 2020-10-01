@@ -57,7 +57,7 @@ Resources:
         MaxBatchSize: "${maxBatch}"
         MinInstancesInService: "${minInService}"
         MinSuccessfulInstancesPercent: 80
-        PauseTime: PT5M
+        PauseTime: "${pauseTime}"
         SuspendProcesses:
           - HealthCheck
           - ReplaceUnhealthy

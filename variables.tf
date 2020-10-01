@@ -125,6 +125,12 @@ variable "name" {
   type        = string
 }
 
+variable "pause_time" {
+  default     = "PT5M"
+  description = "Time to wait for a new instance to check-in before marking it as failed. Specify PauseTime in the ISO8601 duration format (in the format PT#H#M#S, where each # is the number of hours, minutes, and seconds, respectively). "
+  type        = string
+}
+
 variable "subnet_ids" {
   description = "Subnets ALB will listen on"
   type        = list(string)

@@ -67,6 +67,18 @@ variable "launch_template_version" {
   type        = string
 }
 
+variable "lb_access_logging_bucket" {
+  default     = null
+  description = "Optional target for ALB access logging"
+  type        = string
+}
+
+variable "lb_access_logging_prefix" {
+  default     = null
+  description = "Optional target prefix for ALB access logging (only used if `lb_access_logging_bucket` is set)"
+  type        = string
+}
+
 variable "lb_listener_certificate" {
   default     = ""
   description = "ARN of the certificate to attach to the LB. Only if lb_listener_protocol is HTTPS"

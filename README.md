@@ -13,15 +13,18 @@ Terraform module to create Autoscaling Group in AWS with AutoScalingRollingUpdat
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.12.0 |
+| terraform | >= 0.13.0 |
+| aws | ~> 3.0 |
+| null | ~> 3.0 |
+| template | ~> 2.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
-| null | n/a |
-| template | n/a |
+| aws | ~> 3.0 |
+| null | ~> 3.0 |
+| template | ~> 2.0 |
 
 ## Inputs
 
@@ -43,6 +46,8 @@ Terraform module to create Autoscaling Group in AWS with AutoScalingRollingUpdat
 | keypair\_name | Name of an externally created keypair to attach to the automatically created instances. This only applies if launch\_template\_name is defined AND scaling\_object\_type is set to 'launchtemplate' | `string` | `""` | no |
 | launch\_template\_name | Name of externally created launch template to use with this module. If not defined and scaling\_object\_type is set to 'launchtemplate' (the default value), this will cause a launch template to be created in the cloudformation template | `string` | `""` | no |
 | launch\_template\_version | Version of externally created launch template to use with this module. If launch\_template\_name is defined this MUST be defined. | `string` | `""` | no |
+| lb\_access\_logging\_bucket | Optional target for ALB access logging | `string` | `null` | no |
+| lb\_access\_logging\_prefix | Optional target prefix for ALB access logging (only used if `lb_access_logging_bucket` is set) | `string` | `null` | no |
 | lb\_listener\_certificate | ARN of the certificate to attach to the LB. Only if lb\_listener\_protocol is HTTPS | `string` | `""` | no |
 | lb\_listener\_port | Port on which LB will listen | `number` | `80` | no |
 | lb\_listener\_protocol | Protcol on which LB will listen | `string` | `"HTTP"` | no |

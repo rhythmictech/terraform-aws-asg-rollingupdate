@@ -8,6 +8,11 @@ locals {
   tags_asg_format = jsonencode(null_resource.tags_for_asg.*.triggers)
   tags_lt_format  = jsonencode(null_resource.tags_for_lt.*.triggers)
   create_lt       = var.launch_template_name == "" && lower(var.scaling_object_type) == "launchtemplate"
+
+  access_logging = var.lb_access_logging_bucket == null ? [] : [{
+    bucket = var.lb_access_logging_bucket
+    prefix = var.lb_access_logging_prefix
+  }]
 }
 
 resource "null_resource" "tags_for_asg" {
@@ -74,6 +79,17 @@ resource "aws_lb" "this" {
   security_groups    = var.lb_security_groups
   subnets            = var.subnet_ids
   tags               = var.tags
+
+  dynamic "access_logs" {
+    iterator = log
+    for_each = local.access_logging
+
+    content {
+      bucket  = log.value.bucket
+      enabled = true
+      prefix  = lookup(log.value, "prefix", null)
+    }
+  }
 }
 
 resource "aws_lb_listener" "this" {

@@ -38,38 +38,41 @@ resource "null_resource" "tags_for_lt" {
 # LB
 ########################################
 
-data "template_file" "this" {
-  template = file("${path.module}/auto-scaling-group.yml.tpl")
-
-  vars = {
-    name                     = var.name
-    asg_tags                 = local.tags_asg_format
-    createLt                 = local.create_lt
-    description              = "Autoscaling group for EC2 cluster"
-    healthCheck              = var.health_check_type
-    image_id                 = var.image_id
-    instance_security_groups = join("\", \"", var.instance_security_groups)
-    instance_type            = var.instance_type
-    key_name                 = var.keypair_name
-    launchTemplateName       = var.launch_template_name
-    launchTemplateVersion    = var.launch_template_version
-    maxBatch                 = var.batch_max_size
-    maxLifetime              = var.max_instance_lifetime
-    maxSize                  = var.max_instances
-    minInService             = var.min_instances_in_service
-    minSize                  = var.min_instances
-    pauseTime                = var.pause_time
-    scalingObject            = var.scaling_object_type
-    tags                     = local.tags_lt_format
-    targetGroups             = aws_lb_target_group.this.id
-    subnets                  = join("\",\"", var.subnet_ids)
-  }
-}
-
 resource "aws_cloudformation_stack" "this" {
-  name          = "${var.name}-asg-stack"
-  tags          = var.tags
-  template_body = data.template_file.this.rendered
+  name = "${var.name}-asg-stack"
+  tags = var.tags
+  template_body = templatefile("${path.module}/auto-scaling-group.yml.tpl",
+    {
+      name                                = var.name
+      asg_tags                            = local.tags_asg_format
+      createLt                            = local.create_lt
+      description                         = "Autoscaling group for EC2 cluster"
+      healthCheck                         = var.health_check_type
+      image_id                            = var.image_id
+      instance_security_groups            = join("\", \"", var.instance_security_groups)
+      instance_type                       = var.instance_type
+      key_name                            = var.keypair_name
+      launchTemplateName                  = var.launch_template_name
+      launchTemplateOverrides             = var.launch_template_overrides
+      launchTemplateVersion               = var.launch_template_version
+      maxBatch                            = var.batch_max_size
+      maxLifetime                         = var.max_instance_lifetime
+      maxSize                             = var.max_instances
+      minInService                        = var.min_instances_in_service
+      minSize                             = var.min_instances
+      onDemandAllocationStrategy          = var.on_demand_allocation_strategy
+      onDemandBaseCapacity                = var.on_demand_base_capacity
+      onDemandPercentageAboveBaseCapacity = var.on_demand_percent_above_base_capacity
+      pauseTime                           = var.pause_time
+      scalingObject                       = var.scaling_object_type
+      spotAllocationStrategy              = var.spot_allocation_strategy
+      spotInstancePools                   = var.spot_instance_pools
+      spotMaxPrice                        = var.spot_max_price
+      tags                                = local.tags_lt_format
+      targetGroups                        = aws_lb_target_group.this.id
+      subnets                             = join("\",\"", var.subnet_ids)
+    }
+  )
 }
 
 resource "aws_lb" "this" {
@@ -123,4 +126,39 @@ resource "aws_lb_target_group" "this" {
     path              = var.health_check_path
     protocol          = "HTTP" #tfsec:ignore:AWS004, TODO: make var
   }
+}
+
+output "rendered" {
+  value = templatefile("${path.module}/auto-scaling-group.yml.tpl",
+    {
+      name                                = var.name
+      asg_tags                            = local.tags_asg_format
+      createLt                            = local.create_lt
+      description                         = "Autoscaling group for EC2 cluster"
+      healthCheck                         = var.health_check_type
+      image_id                            = var.image_id
+      instance_security_groups            = join("\", \"", var.instance_security_groups)
+      instance_type                       = var.instance_type
+      key_name                            = var.keypair_name
+      launchTemplateName                  = var.launch_template_name
+      launchTemplateOverrides             = var.launch_template_overrides
+      launchTemplateVersion               = var.launch_template_version
+      maxBatch                            = var.batch_max_size
+      maxLifetime                         = var.max_instance_lifetime
+      maxSize                             = var.max_instances
+      minInService                        = var.min_instances_in_service
+      minSize                             = var.min_instances
+      onDemandAllocationStrategy          = var.on_demand_allocation_strategy
+      onDemandBaseCapacity                = var.on_demand_base_capacity
+      onDemandPercentageAboveBaseCapacity = var.on_demand_percent_above_base_capacity
+      pauseTime                           = var.pause_time
+      scalingObject                       = var.scaling_object_type
+      spotAllocationStrategy              = var.spot_allocation_strategy
+      spotInstancePools                   = var.spot_instance_pools
+      spotMaxPrice                        = var.spot_max_price
+      tags                                = local.tags_lt_format
+      targetGroups                        = aws_lb_target_group.this.id
+      subnets                             = join("\",\"", var.subnet_ids)
+    }
+  )
 }

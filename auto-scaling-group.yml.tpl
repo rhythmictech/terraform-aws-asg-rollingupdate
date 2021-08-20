@@ -46,6 +46,52 @@ Resources:
         Version: "${launchTemplateVersion}"
         %{~ endif ~}
       %{~ endif ~}
+      %{~ if lower(scalingObject) == "mixedinstancespolicy" ~}
+      MixedInstancesPolicy:
+         InstancesDistribution: 
+           OnDemandAllocationStrategy: "${onDemandAllocationStrategy}"
+           OnDemandBaseCapacity: "${onDemandBaseCapacity}"
+           OnDemandPercentageAboveBaseCapacity: "${onDemandPercentageAboveBaseCapacity}"
+           SpotAllocationStrategy: "${spotAllocationStrategy}"
+           SpotInstancePools: "${spotInstancePools}"
+           SpotMaxPrice: "${spotMaxPrice}"
+         LaunchTemplate:
+            LaunchTemplateSpecification: 
+         %{~ if createLt ~}
+               LaunchTemplateId: "!Ref '${name}LaunchTemplate'"
+               Version: !GetAtt '${name}LaunchTemplate.LatestVersionNumber'
+         %{~ else ~}
+               LaunchTemplateName: "${launchTemplateName}"
+               Version: "${launchTemplateVersion}"
+         %{~ endif ~}
+            Overrides: [
+            %{~ for override in launchTemplateOverrides ~}
+               {
+              %{~ if can(override.instanceType) ~}
+                  InstanceType: "${override.instanceType}",
+              %{~ endif ~}
+              %{~ if can(override.launchTemplateSpecification) ~}
+                  LaunchTemplateSpecification: 
+                %{~ if can(override.launchTemplateSpecification.launchTemplateId) ~}
+                    LaunchTemplateId: "${override.launchTemplateSpecification.launchTemplateId}"
+                %{~ endif ~}
+                %{~ if can(override.launchTemplateSpecification.launchTemplateName) ~}
+                    LaunchTemplateName: "${override.launchTemplateSpecification.launchTemplateName}"
+                %{~ endif ~}
+                %{~ if can(override.launchTemplateSpecification.version) ~}
+                    Version: "${override.launchTemplateSpecification.version}"
+                %{~ endif ~}
+              %{~ endif ~}
+              %{~ if can(override.weightedCapacity) ~}
+                  WeightedCapacity: "${override.weightedCapacity}",
+              %{~ endif ~}
+               }
+              %{~ if index(launchTemplateOverrides, override) < length(launchTemplateOverrides) - 1 ~}
+                ,
+              %{~ endif ~}
+            %{~ endfor ~}
+            ]
+      %{~ endif ~}
       TargetGroupARNs: ["${targetGroups}"]
       VPCZoneIdentifier: ["${subnets}"]
       Tags: ${asg_tags}

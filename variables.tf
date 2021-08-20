@@ -56,11 +56,36 @@ variable "keypair_name" {
   type        = string
 }
 
+variable "on_demand_allocation_strategy" {
+  default     = "prioritized"
+  description = "Strategy for allocation of instances to fulfill On-Demand capacity. Only valid value is currently 'prioritized'."
+  type        = string
+}
+
+variable "on_demand_base_capacity" {
+  default     = 0
+  description = "Minimum amount of the ASG Capacity that should be filled with On Demand instances"
+  type        = number
+}
+
+variable "on_demand_percent_above_base_capacity" {
+  default     = 100
+  description = "Percentage of the instances beyond the base capacity of the ASG that should be On Demand"
+  type        = number
+}
+
 variable "launch_template_name" {
   default     = ""
   description = "Name of externally created launch template to use with this module. If not defined and scaling_object_type is set to 'launchtemplate' (the default value), this will cause a launch template to be created in the cloudformation template"
   type        = string
 }
+
+variable "launch_template_overrides" {
+  default     = []
+  description = "A list of maps defining any overrides to the Mixed Instance Policy Template. Required for Mixed Instance Policies. The map can contain the following values: instanceType (AWS Instance Type), launchTemplateSpecification (a separate launch template to use, object consisting of either launchTemplateId or launchTemplateName and optionally version), weightedCapacity (a weighted capacity entry for how frequently to use this override)"
+  type        = list(map(string))
+}
+
 variable "launch_template_version" {
   default     = ""
   description = "Version of externally created launch template to use with this module. If launch_template_name is defined this MUST be defined."
@@ -150,7 +175,25 @@ variable "subnet_ids" {
 
 variable "scaling_object_type" {
   default     = "launchtemplate"
-  description = "The object type the autoscaling group should use as the basis for its instances. The default (and currently the only supported) value is 'LaunchTemplate'. Future values may include 'MixedInstancesPolicy', 'LaunchConfigurationName', and 'InstanceId'"
+  description = "The object type the autoscaling group should use as the basis for its instances. The default value is 'LaunchTemplate'. MixedInstancesPolicy is also supported, and future values may include 'LaunchConfigurationName', and 'InstanceId'"
+  type        = string
+}
+
+variable "spot_allocation_strategy" {
+  default     = "lowest-price"
+  description = "Method by which to allocate spot instances for a MixedInstancesPolicy deployment. Valid values are lowest-price, capacity-optimized, and capacity-optimized-prioritized."
+  type        = string
+}
+
+variable "spot_instance_pools" {
+  default     = 2
+  description = "Number of Spot Instance pools to allocate your spot capacity for a MixedInstancesPolicy deployment. Applies only when lowest-price allocation strategy is in effect."
+  type        = number
+}
+
+variable "spot_max_price" {
+  default     = ""
+  description = "Maximum price to pay for Spot Instances in a MixedInstancesPolicy deployment. Default is blank, which equates to the price of on-demand instances."
   type        = string
 }
 

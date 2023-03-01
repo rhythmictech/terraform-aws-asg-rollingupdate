@@ -14,6 +14,12 @@ variable "batch_max_size" {
   type        = string
 }
 
+variable "elb_drop_invalid_headers" {
+  default     = true
+  description = "Invalid headers being passed through to the target of the load balance may exploit vulnerabilities"
+  type        = bool
+}
+
 variable "health_check_path" {
   default     = "EC2"
   description = "Path of HTTP Health Check"

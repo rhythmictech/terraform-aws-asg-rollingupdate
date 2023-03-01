@@ -76,12 +76,13 @@ resource "aws_cloudformation_stack" "this" {
 }
 
 resource "aws_lb" "this" {
-  name               = "${var.name}-alb"
-  internal           = var.aws_lb_internal
-  load_balancer_type = "application"
-  security_groups    = var.lb_security_groups
-  subnets            = var.subnet_ids
-  tags               = var.tags
+  name                       = "${var.name}-alb"
+  drop_invalid_header_fields = var.elb_drop_invalid_headers
+  internal                   = var.aws_lb_internal
+  load_balancer_type         = "application"
+  security_groups            = var.lb_security_groups
+  subnets                    = var.subnet_ids
+  tags                       = var.tags
 
   dynamic "access_logs" {
     iterator = log
